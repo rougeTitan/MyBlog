@@ -155,9 +155,9 @@ describe("BlogPostPage", () => {
 
   describe("not found behavior", () => {
     it("calls notFound for unknown slugs", async () => {
-      await expect(
-        BlogPostPage({ params: Promise.resolve({ slug: "non-existent-post" }) })
-      ).rejects.toThrow("NEXT_NOT_FOUND")
+      await expect(BlogPostPage({ params: Promise.resolve({ slug: "non-existent-post" }) })).rejects.toThrow(
+        "NEXT_NOT_FOUND"
+      )
       expect(mockNotFound).toHaveBeenCalled()
     })
   })
