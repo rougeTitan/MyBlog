@@ -1,71 +1,12 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Calendar, Clock } from "lucide-react"
+import { allBlogPosts } from "@/content/blog"
 
 export default function BlogPage() {
-  const posts = [
-    {
-      slug: "building-scalable-nextjs-apps",
-      title: "Building Scalable Next.js Applications",
-      excerpt:
-        "Learn the best practices and patterns for building Next.js applications that can scale to millions of users. We'll cover caching strategies, API design, and performance optimization.",
-      date: "2024-03-15",
-      readTime: "8 min read",
-      tags: ["Next.js", "Performance", "Architecture"],
-      featured: true,
-    },
-    {
-      slug: "typescript-advanced-patterns",
-      title: "Advanced TypeScript Patterns for React",
-      excerpt:
-        "Explore advanced TypeScript patterns that will make your React code more type-safe and maintainable. From generics to conditional types, we cover it all.",
-      date: "2024-03-08",
-      readTime: "10 min read",
-      tags: ["TypeScript", "React", "Best Practices"],
-      featured: true,
-    },
-    {
-      slug: "database-optimization-tips",
-      title: "Database Optimization Tips for Web Apps",
-      excerpt:
-        "Practical tips for optimizing database queries and improving application performance. Learn about indexing, query optimization, and connection pooling.",
-      date: "2024-02-28",
-      readTime: "6 min read",
-      tags: ["Database", "Performance", "PostgreSQL"],
-      featured: false,
-    },
-    {
-      slug: "modern-css-techniques",
-      title: "Modern CSS Techniques You Should Know",
-      excerpt:
-        "Discover modern CSS features like container queries, cascade layers, and CSS Grid that will transform how you build responsive layouts.",
-      date: "2024-02-20",
-      readTime: "7 min read",
-      tags: ["CSS", "Frontend", "Web Design"],
-      featured: false,
-    },
-    {
-      slug: "api-design-best-practices",
-      title: "RESTful API Design Best Practices",
-      excerpt:
-        "A comprehensive guide to designing clean, maintainable, and scalable RESTful APIs. Learn about versioning, error handling, and documentation.",
-      date: "2024-02-12",
-      readTime: "9 min read",
-      tags: ["API", "Backend", "Architecture"],
-      featured: false,
-    },
-    {
-      slug: "testing-strategies-frontend",
-      title: "Testing Strategies for Frontend Applications",
-      excerpt:
-        "Learn how to implement effective testing strategies for your frontend applications, from unit tests to end-to-end testing.",
-      date: "2024-02-05",
-      readTime: "8 min read",
-      tags: ["Testing", "Frontend", "Quality"],
-      featured: false,
-    },
-  ]
+  const posts = allBlogPosts
 
   const featuredPosts = posts.filter((p) => p.featured)
   const recentPosts = posts.filter((p) => !p.featured)
@@ -75,8 +16,8 @@ export default function BlogPage() {
       <div className="mx-auto max-w-5xl space-y-16">
         {/* Header */}
         <section className="space-y-4">
-          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">Blog</h1>
-          <p className="text-pretty text-lg leading-relaxed text-muted-foreground">
+          <h1 className="text-4xl font-bold tracking-tight text-balance md:text-5xl">Blog</h1>
+          <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
             Thoughts on software development, web technologies, and lessons learned from building products.
           </p>
         </section>
@@ -87,7 +28,7 @@ export default function BlogPage() {
           <div className="grid gap-8 lg:grid-cols-2">
             {featuredPosts.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`}>
-                <Card className="h-full p-6 transition-colors hover:border-foreground">
+                <Card className="hover:border-foreground h-full p-6 transition-colors">
                   <article className="space-y-4">
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
@@ -96,9 +37,9 @@ export default function BlogPage() {
                         </Badge>
                       ))}
                     </div>
-                    <h3 className="text-balance text-xl font-semibold">{post.title}</h3>
-                    <p className="text-pretty leading-relaxed text-muted-foreground">{post.excerpt}</p>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <h3 className="text-xl font-semibold text-balance">{post.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed text-pretty">{post.excerpt}</p>
+                    <div className="text-muted-foreground flex items-center gap-4 text-sm">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
                         <time dateTime={post.date}>
@@ -127,7 +68,7 @@ export default function BlogPage() {
           <div className="space-y-6">
             {recentPosts.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`}>
-                <Card className="p-6 transition-colors hover:border-foreground">
+                <Card className="hover:border-foreground p-6 transition-colors">
                   <article className="space-y-3">
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
@@ -136,9 +77,9 @@ export default function BlogPage() {
                         </Badge>
                       ))}
                     </div>
-                    <h3 className="text-balance text-lg font-semibold">{post.title}</h3>
-                    <p className="text-pretty leading-relaxed text-muted-foreground">{post.excerpt}</p>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <h3 className="text-lg font-semibold text-balance">{post.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed text-pretty">{post.excerpt}</p>
+                    <div className="text-muted-foreground flex items-center gap-4 text-sm">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
                         <time dateTime={post.date}>

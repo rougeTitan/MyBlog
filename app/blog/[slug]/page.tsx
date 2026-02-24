@@ -3,8 +3,9 @@ import { notFound } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar, Clock } from "lucide-react"
+import { getBlogPostContent, getBlogPostMeta } from "@/content/blog"
 
-// Sample blog posts data
+// Legacy Sample blog posts data (kept for backward compatibility)
 const posts = {
   "building-scalable-nextjs-apps": {
     title: "Building Scalable Next.js Applications",
@@ -128,11 +129,20 @@ These advanced patterns will help you write more maintainable and type-safe Reac
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = posts[slug as keyof typeof posts]
+
+  // Try to get post from new content structure first
+  const postMeta = getBlogPostMeta(slug)
+  const postContent = getBlogPostContent(slug)
+
+  // Fallback to legacy posts if not found in new structure
+  const post = postMeta || posts[slug as keyof typeof posts]
 
   if (!post) {
     notFound()
   }
+
+  // Use new content structure if available
+  const useNewStructure = postMeta && postContent
 
   return (
     <div className="container mx-auto px-4 py-16">
@@ -154,8 +164,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </Badge>
               ))}
             </div>
-            <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">{post.title}</h1>
-            <div className="flex items-center gap-4 text-muted-foreground">
+            <h1 className="text-4xl font-bold tracking-tight text-balance md:text-5xl">{post.title}</h1>
+            <div className="text-muted-foreground flex items-center gap-4">
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 <time dateTime={post.date}>
@@ -174,37 +184,41 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </header>
 
           {/* Content */}
-          <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <div
-              className="space-y-6 leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: post.content
-                  .split("\n\n")
-                  .map((paragraph) => {
-                    if (paragraph.startsWith("# ")) {
-                      return `<h1 class="text-3xl font-bold mt-8 mb-4">${paragraph.slice(2)}</h1>`
-                    }
-                    if (paragraph.startsWith("## ")) {
-                      return `<h2 class="text-2xl font-semibold mt-6 mb-3">${paragraph.slice(3)}</h2>`
-                    }
-                    if (paragraph.startsWith("### ")) {
-                      return `<h3 class="text-xl font-semibold mt-4 mb-2">${paragraph.slice(4)}</h3>`
-                    }
-                    if (paragraph.startsWith("```")) {
-                      return `<pre class="bg-muted p-4 rounded-lg overflow-x-auto my-4"><code>${paragraph.replace(/```\w*\n?/g, "")}</code></pre>`
-                    }
-                    if (paragraph.startsWith("- ")) {
-                      const items = paragraph
-                        .split("\n")
-                        .map((item) => `<li class="ml-4">${item.slice(2)}</li>`)
-                        .join("")
-                      return `<ul class="list-disc space-y-2 my-4">${items}</ul>`
-                    }
-                    return `<p class="text-muted-foreground">${paragraph}</p>`
-                  })
-                  .join(""),
-              }}
-            />
+          <div className="prose prose-lg prose-neutral dark:prose-invert prose-headings:font-extrabold prose-headings:tracking-tight prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:font-extrabold prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4 prose-h3:font-bold prose-p:text-base prose-p:leading-relaxed prose-p:mb-6 prose-p:text-justify prose-ul:my-6 prose-ul:space-y-2 prose-li:text-base prose-strong:font-semibold prose-strong:text-foreground prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-500 max-w-none">
+            {useNewStructure ? (
+              <div className="space-y-4">{postContent}</div>
+            ) : (
+              <div
+                className="space-y-6 leading-relaxed"
+                dangerouslySetInnerHTML={{
+                  __html: (post as { content: string }).content
+                    .split("\n\n")
+                    .map((paragraph: string) => {
+                      if (paragraph.startsWith("# ")) {
+                        return `<h1 class="text-3xl font-bold mt-8 mb-4">${paragraph.slice(2)}</h1>`
+                      }
+                      if (paragraph.startsWith("## ")) {
+                        return `<h2 class="text-2xl font-semibold mt-6 mb-3">${paragraph.slice(3)}</h2>`
+                      }
+                      if (paragraph.startsWith("### ")) {
+                        return `<h3 class="text-xl font-semibold mt-4 mb-2">${paragraph.slice(4)}</h3>`
+                      }
+                      if (paragraph.startsWith("```")) {
+                        return `<pre class="bg-muted p-4 rounded-lg overflow-x-auto my-4"><code>${paragraph.replace(/```\w*\n?/g, "")}</code></pre>`
+                      }
+                      if (paragraph.startsWith("- ")) {
+                        const items = paragraph
+                          .split("\n")
+                          .map((item: string) => `<li class="ml-4">${item.slice(2)}</li>`)
+                          .join("")
+                        return `<ul class="list-disc space-y-2 my-4">${items}</ul>`
+                      }
+                      return `<p class="text-muted-foreground">${paragraph}</p>`
+                    })
+                    .join(""),
+                }}
+              />
+            )}
           </div>
         </article>
       </div>

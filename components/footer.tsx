@@ -1,30 +1,22 @@
-"use client"
-
-import { Github, Linkedin, Twitter, Mail } from "lucide-react"
+import { Github, Linkedin, X, Mail } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
 
 const socialLinks = [
-  { name: "GitHub", href: "https://github.com/yourusername", icon: Github },
-  { name: "LinkedIn", href: "https://linkedin.com/in/yourusername", icon: Linkedin },
-  { name: "Twitter", href: "https://twitter.com/yourusername", icon: Twitter },
-  { name: "Email", href: "mailto:your.email@example.com", icon: Mail },
+  { name: "GitHub", href: "https://github.com/rougeTitan", icon: Github },
+  { name: "LinkedIn", href: "https://linkedin.com/in/siddeshdp/", icon: Linkedin },
+  { name: "Email", href: "mailto:siddheshdilipkumar@gmail.com", icon: Mail },
 ]
 
 export function Footer() {
-  const [year, setYear] = useState(2025)
-
-  useEffect(() => {
-    setYear(new Date().getFullYear())
-  }, [])
+  const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-border bg-muted/30">
+    <footer className="border-border bg-muted/30 border-t">
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="text-center md:text-left">
-            <p className="text-sm text-muted-foreground">
-              © {year} Software Engineer Portfolio. All rights reserved.
+            <p className="text-muted-foreground text-sm">
+              © {year} Siddhesh's Portfolio. Built with Next.js & TypeScript.
             </p>
           </div>
 
@@ -37,7 +29,7 @@ export function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                   aria-label={link.name}
                 >
                   <Icon className="h-5 w-5" />

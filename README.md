@@ -29,17 +29,20 @@ A modern, responsive portfolio website built with Next.js 16, React 19, and Tail
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/portfolio-website.git
 cd portfolio-website
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install --legacy-peer-deps
 ```
 
 3. Run the development server:
+
 ```bash
 npm run dev
 ```

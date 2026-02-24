@@ -16,7 +16,7 @@ export function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="border-border bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="text-xl font-bold tracking-tight">
           Portfolio
@@ -28,8 +28,8 @@ export function Header() {
               <Link
                 href={item.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-foreground",
-                  pathname === item.href ? "text-foreground" : "text-muted-foreground",
+                  "hover:text-foreground text-sm font-medium transition-colors",
+                  pathname === item.href ? "text-foreground" : "text-muted-foreground"
                 )}
               >
                 {item.name}

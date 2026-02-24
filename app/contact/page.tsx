@@ -8,7 +8,8 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Github, Linkedin, Mail, Twitter } from "lucide-react"
+import { Github, Linkedin, Mail } from "lucide-react"
+import { submitContactForm } from "@/lib/api"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -25,18 +26,22 @@ export default function ContactPage() {
     setIsSubmitting(true)
     setSubmitStatus("idle")
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      await submitContactForm(formData)
+      setSubmitStatus("success")
+      setFormData({ name: "", email: "", subject: "", message: "" })
 
-    // In a real application, you would send the form data to an API endpoint
-    console.log("Form submitted:", formData)
+      // Reset success message after 5 seconds
+      setTimeout(() => setSubmitStatus("idle"), 5000)
+    } catch (error) {
+      console.error("Failed to submit form:", error)
+      setSubmitStatus("error")
 
-    setIsSubmitting(false)
-    setSubmitStatus("success")
-    setFormData({ name: "", email: "", subject: "", message: "" })
-
-    // Reset success message after 5 seconds
-    setTimeout(() => setSubmitStatus("idle"), 5000)
+      // Reset error message after 5 seconds
+      setTimeout(() => setSubmitStatus("idle"), 5000)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -50,26 +55,20 @@ export default function ContactPage() {
     {
       name: "Email",
       icon: Mail,
-      href: "mailto:your.email@example.com",
-      label: "your.email@example.com",
+      href: "mailto:siddheshdilipkumar@gmail.com",
+      label: "siddheshdilipkumar@gmail.com",
     },
     {
       name: "GitHub",
       icon: Github,
-      href: "https://github.com/yourusername",
-      label: "github.com/yourusername",
+      href: "https://github.com/rougeTitan",
+      label: "github.com/rougeTitan",
     },
     {
       name: "LinkedIn",
       icon: Linkedin,
-      href: "https://linkedin.com/in/yourusername",
-      label: "linkedin.com/in/yourusername",
-    },
-    {
-      name: "Twitter",
-      icon: Twitter,
-      href: "https://twitter.com/yourusername",
-      label: "@yourusername",
+      href: "https://linkedin.com/in/siddeshdp",
+      label: "linkedin.com/in/siddeshdp",
     },
   ]
 
@@ -78,8 +77,8 @@ export default function ContactPage() {
       <div className="mx-auto max-w-4xl space-y-16">
         {/* Header */}
         <section className="space-y-4">
-          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">Get In Touch</h1>
-          <p className="text-pretty text-lg leading-relaxed text-muted-foreground">
+          <h1 className="text-4xl font-bold tracking-tight text-balance md:text-5xl">Get In Touch</h1>
+          <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
             Have a project in mind or want to discuss opportunities? Feel free to reach out through the form below or
             connect with me on social media.
           </p>
@@ -141,13 +140,13 @@ export default function ContactPage() {
                 </div>
 
                 {submitStatus === "success" && (
-                  <div className="rounded-lg bg-green-50 dark:bg-green-950 p-4 text-sm text-green-800 dark:text-green-200">
+                  <div className="rounded-lg bg-green-50 p-4 text-sm text-green-800 dark:bg-green-950 dark:text-green-200">
                     Thanks for reaching out! I'll get back to you soon.
                   </div>
                 )}
 
                 {submitStatus === "error" && (
-                  <div className="rounded-lg bg-red-50 dark:bg-red-950 p-4 text-sm text-red-800 dark:text-red-200">
+                  <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-red-950 dark:text-red-200">
                     Something went wrong. Please try again or contact me directly via email.
                   </div>
                 )}
@@ -163,7 +162,7 @@ export default function ContactPage() {
           <section className="space-y-8">
             <div className="space-y-4">
               <h2 className="text-2xl font-semibold">Connect With Me</h2>
-              <p className="text-pretty leading-relaxed text-muted-foreground">
+              <p className="text-muted-foreground leading-relaxed text-pretty">
                 I'm always interested in hearing about new projects and opportunities. Whether you have a question or
                 just want to say hi, I'll try my best to get back to you!
               </p>
@@ -178,12 +177,12 @@ export default function ContactPage() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-lg border border-border bg-card p-4 transition-colors hover:border-foreground"
+                    className="border-border bg-card hover:border-foreground flex items-center gap-3 rounded-lg border p-4 transition-colors"
                   >
-                    <Icon className="h-5 w-5 text-muted-foreground" />
+                    <Icon className="text-muted-foreground h-5 w-5" />
                     <div>
                       <div className="font-medium">{link.name}</div>
-                      <div className="text-sm text-muted-foreground">{link.label}</div>
+                      <div className="text-muted-foreground text-sm">{link.label}</div>
                     </div>
                   </a>
                 )
@@ -192,7 +191,7 @@ export default function ContactPage() {
 
             <Card className="p-6">
               <h3 className="mb-3 text-lg font-semibold">Response Time</h3>
-              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+              <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
                 I typically respond to messages within 24-48 hours during weekdays. For urgent matters, please reach out
                 via email directly.
               </p>
